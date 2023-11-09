@@ -1,0 +1,23 @@
+.form_container {
+    height: 400px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    line-height: 30px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 5px;
+}
+.form_description {
+    height: 8em;
+    justify-content: flex-start;
+}
+
+.form_btn-submit {
+    margin-top: 10px;
+    padding: 8px;
+}
+
+label {
+    color: #EAC8DB;
+}

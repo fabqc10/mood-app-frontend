@@ -6,11 +6,17 @@ export const httpGetFeelings = async () =>{
 }
 
 export const httpPostFeeling = async (feeling: FeelingForm) =>{
-    await fetch(API_URI,{
+    return await fetch(API_URI,{
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(feeling)
     })
+}
+
+export const httpDeleteFeeling = async (id:string) => {
+    return await fetch(`${API_URI}/${id}`,{
+        method:'delete'
+    });
 }

@@ -10,11 +10,33 @@ import { Navigation } from "./routes/Navigation/Navigation";
 function App() {
   const [feelings, setFeelings] = useState<Feeling[]>([]);
 
+  useEffect(() => {
+    let subscribed = true;
+
+    httpGetFeelings().then((data) => {
+      if (subscribed) {
+        setFeelings(data);
+      }
+    });
+
+    return () => {
+      subscribed = false;
+    };
+  }, []);
+
+  const createFeeling = async (feeling: Feeling) => {
+    setFeelings([...feelings, feeling]);
+  }
+
+  const deleteFeeling = (id: string) => {
+    setFeelings((prev) => prev.filter((feeling) => feeling.id !== id));
+  };
+
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>
-        <Route index element={<FormScreen />} />
-        <Route path="myboard" element={<BoardScreen />} />
+        <Route index element={<FormScreen createFeeling={createFeeling}/>} />
+        <Route path="myboard" element={<BoardScreen feelings={feelings} deleteFeeling={deleteFeeling} />} />
       </Route>
     </Routes>
   );

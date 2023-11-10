@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import "./FormFeeling.styles.css";
 import { httpPostFeeling } from "../../http";
+import { useNavigate } from 'react-router-dom';
+
+type FormFeelingProps = {
+  createFeeling: (feeling: Feeling) => void;
+}
 
 const initialFormData: FeelingForm = {
     date:"",
@@ -8,9 +13,9 @@ const initialFormData: FeelingForm = {
     description: "",
   };
 
-export const FormFeeling = () => {
+export const FormFeeling: FC<FormFeelingProps> = ({createFeeling}) => {
     const [formData, setFormData] = useState<FeelingForm>(initialFormData);
-    console.log(formData);
+    const navigate = useNavigate();
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -25,8 +30,11 @@ export const FormFeeling = () => {
     const handleSubmit = async (e: React.FormEvent) =>{
         e.preventDefault();
 
-        await httpPostFeeling(formData);
+        const serverResponse = await httpPostFeeling(formData);
+        const newFeeling = await serverResponse.json();
+        createFeeling(newFeeling);
         setFormData(initialFormData);
+        navigate("/myboard");
 
     }
 

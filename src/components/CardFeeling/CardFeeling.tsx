@@ -1,8 +1,10 @@
 import { FC } from "react";
 import "./CardFeeling.styles.css";
+import { httpDeleteFeeling } from "../../http";
 
 type CardFeelingProps = {
   feeling: Feeling;
+  deleteFeeling: (id: string) => void;
 };
 
 const generateIcon = (mood: string) => {
@@ -36,9 +38,23 @@ function formatDateString(dateString: string) {
     return date.toLocaleDateString('en-US', options);
   }
 
-export const CardFeeling: FC<CardFeelingProps> = ({ feeling }) => {
+export const CardFeeling: FC<CardFeelingProps> = ({ feeling,deleteFeeling }) => {
+
+  const handleDelete = async (id: string) => {
+    const serverResponse = await httpDeleteFeeling(id);
+
+    if (!serverResponse.ok) {
+      const responseText = await serverResponse.text();
+      throw new Error(`Server response: ${responseText}`);
+    }
+
+    const feelingDeleted = await serverResponse.json();
+    deleteFeeling(feelingDeleted.id);
+  };
+
   return (
     <div className="cardFeeling_container">
+      <p className="cardFeeling_btn-delete" onClick={()=>handleDelete(feeling.id)}>X</p>
       <p className="cardFeeling_icon">{generateIcon(feeling.mood)}</p>
       <p className="cardFeeling_date">{formatDateString(feeling.date)}</p>
       <p className="cardFeeling_mood">{feeling.mood}</p>

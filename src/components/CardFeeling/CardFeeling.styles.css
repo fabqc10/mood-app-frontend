@@ -52,5 +52,14 @@
 }
 
 .cardFeeling_description{
+    margin-top: 1em;
     font-size: 1.5em;
+}
+
+.cardFeeling_btn-delete {
+    position: absolute;
+    right: 0;
+    padding: 5px;
+    margin-right: 2px;
+    cursor: pointer;
 }
